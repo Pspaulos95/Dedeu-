@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>DadosPib</title>
+    <hr>
+    <link rel="stylesheet" href="css/Style.css"/>
+    
+</head>
+<body>
+    <header>
+        <h1>Filtro de pesquisa Econômica - Dados do Pib</h1>
+        
+    </header>
+    <main>
+    <div class="filter-container"> 
+        <br/>
+        <label for="ano">Selecionar Ano:</label> <!-- rótulo do campo de seleção do ano-->
+        <select id="ano"> <!-- menu para a seleção do ano-->
+            <option value="">Selecione um ano</option> <!-- as opções de anos disponíveis-->
+            <option value="1996">1996</option>
+            <option value="1997">1997</option>
+            <option value="1998">1998</option>
+            <option value="1999">1999</option>
+            <option value="2000">2000</option>
+            <option value="2001">2001</option>
+            <option value="2002">2002</option>
+            <option value="2003">2003</option>
+            <option value="2004">2004</option>
+            <option value="2005">2005</option>
+            <option value="2006">2006</option>
+            <option value="2007">2007</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+        </select>
+        <label for="trimestre">Selecionar Trimestre:</label> <!--label é uma maneira de marcar ou categorizar itens-->
+        <select id="trimestre">
+            <option value="">Todos</option>
+            <option value="1">1º Trimestre</option>
+            <option value="2">2º Trimestre</option>
+            <option value="3">3º Trimestre</option>
+            <option value="4">4º Trimestre</option>
+        </select>
+        <label for="dataType">Selecionar Tipo de Dado:</label>
+        <select id="dataType">
+            <option value="">Selecione um tipo</option>
+            <option value="VA">Valor Anual</option>
+            <option value="imposto">Imposto</option>
+            <option value="pibAnual">PIB Anual</option>
+            <option value="pibTrimestral">PIB Trimestral</option>
+            <option value="aumentoPercentual">Aumento Percentual do PIB (%)</option>
+        </select>
+        <button onclick="filterData()">Filtrar</button> <!--botão para chamar a função filterData() definida para filtrar dados-->
+    </div>
+
+    <h2>Resultados da Pesquisa:</h2> <!--botão que indica o resultado da pesquisa-->
+    <div id="results"></div>
+    </main>
+    <!--simulação dos dados disponiveis na tabela para filtragem. É necessário colocar os dados aqui?-->
+    <!--início do bloco de JavaScript-->
+    <script> 
+        const data = [ 
+        { ano: 1996, trimestre: '1', VA: 97.3, Imposto: 93.7, PIB_Anual: 854.764, PIB_Trimestral: 189.323, Aumento_Percentual: -0.6 },
+        { ano: 1996, trimestre: '2', VA: 100.1, Imposto: 100.0, PIB_Anual: null, PIB_Trimestral: 204.611, Aumento_Percentual: 0.4 },
+        { ano: 1996, trimestre: '3', VA: 107.5, Imposto: 108.1, PIB_Anual: null, PIB_Trimestral: 221.513, Aumento_Percentual: 2.2 },
+        { ano: 1996, trimestre: '4', VA: 103.0, Imposto: 113.0, PIB_Anual: null, PIB_Trimestral: 239.316, Aumento_Percentual: 2.2 },
+        { ano: 1997, trimestre: '1', VA: 97.9, Imposto: 98.4, PIB_Anual: 952.089, PIB_Trimestral: 219.117, Aumento_Percentual: 3.4 },
+        { ano: 1997, trimestre: '2', VA: 102.0, Imposto: 107.1, PIB_Anual: null, PIB_Trimestral: 232.890, Aumento_Percentual: 4.1 },
+        { ano: 2023, trimestre: '4', VA: 102.1, Imposto: 104.1, PIB_Anual: 10856.112, PIB_Trimestral: 2831.340, Aumento_Percentual: 2.9 },
+        ];
+        
+        //essa função coleta os dados selecionados e filtra o array data baseado nas seleções
+        function filterData() {
+            //cons declara constantes. Uma vez atribuido, não pode alterar o valor.
+            const selectedAno = parseInt(document.getElementById('ano').value);
+            const selectedTrimestre = document.getElementById('trimestre').value;
+            const selectedType = document.getElementById('dataType').value;
+            //let declara varíváveis
+            let filteredData = data.filter(item => {
+                const inAno = !selectedAno || item.ano === selectedAno;
+                const inTrimestre = !selectedTrimestre || item.trimestre == selectedTrimestre;
+                return inAno && inTrimestre;
+            });
+
+            displayResults(filteredData, selectedType);
+        }
+
+        function displayResults(filteredData, selectedType) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                resultsDiv.innerHTML = '<p>Nenhum registro encontrado.</p>';
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const div = document.createElement('div');
+                const resultText = selectedType ? ${item.ano} - ${item.trimestre}º: ${item[selectedType]} : ${item.year} - ${item.quarter}º: Selecione um tipo de dado;
+                div.textContent = resultText;
+                resultsDiv.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
+   
